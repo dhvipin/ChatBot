@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Website Chatbot</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-container {
+            width: 380px;
+            max-width: 95vw;
+            height: 600px;
+            background: #1e1e2f;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1.5px;
+            box-shadow: 0 5px 10px rgba(255, 75, 43, 0.5);
+            user-select: none;
+        }
+
+        .chat-box {
+            flex: 1;
+            padding: 20px;
+            background: #2a2a3d;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Scrollbar Styling */
+        .chat-box::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-box::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb {
+            background: #ff4b2b;
+            border-radius: 3px;
+        }
+
+        .chat-box p {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 25px;
+            font-size: 1rem;
+            line-height: 1.3;
+            animation: fadeIn 0.4s ease forwards;
+            user-select: text;
+        }
+
+        .user {
+            align-self: flex-end;
+            background: #ff4b2b;
+            color: white;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 3px 6px rgba(255, 75, 43, 0.4);
+        }
+
+        .bot {
+            align-self: flex-start;
+            background: #3b3b58;
+            color: #e0e0e0;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 3px 6px rgba(59, 59, 88, 0.4);
+            font-style: italic;
+        }
+
+        .input-box {
+            display: flex;
+            padding: 15px 20px;
+            background: #1f1f33;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: none;
+            background: #2a2a3d;
+            color: #eee;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        input::placeholder {
+            color: #777;
+        }
+
+        input:focus {
+            outline: none;
+            background: #3b3b58;
+        }
+
+        button {
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            padding: 0 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 5px 10px rgba(255, 75, 43, 0.5);
+            transition: background 0.3s ease, transform 0.15s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #ff4b2b, #ff416c);
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Smooth fade-in animation for messages */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">My Chat Bot 🤖</div>
+
+        <div class="chat-box" id="chatBox">
+            <p class="bot"><strong>Bot:</strong> Hello! How can I help you?</p>
+        </div>
+
+        <div class="input-box">
+            <input type="text" id="userInput" placeholder="Type your message..."
+                onkeydown="if(event.key==='Enter') sendMessage()">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById("userInput");
+            const message = input.value.trim();
+            if (message === "") return;
+
+            addMessage("You", message, "user");
+            input.value = "";
+
+            setTimeout(() => {
+                const reply = botReply(message);
+                addMessage("Bot", reply, "bot");
+            }, 500);
+        }
+
+        function addMessage(sender, text, className) {
+            const chatBox = document.getElementById("chatBox");
+            const msg = document.createElement("p");
+            msg.className = className;
+            msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            chatBox.appendChild(msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        function botReply(message) {
+            message = message.toLowerCase();
+
+            if (message.includes("hi") || message.includes("hello")) {
+                return "Hello! Welcome to Googlies, how can I help you?";
+            }
+            else if (message.includes("what is googlies") || message.includes("your company")) {
+                return "Googlies is a consultancy service specializing in government tender registrations and bid assistance Company.";
+            }
+            else if (message.includes("services") || message.includes("service")) {
+                return "We offer Tender Portal Registration, Tender Support, Bid Assistance, e-Procure services, and help with CPPP, GEM, Indian Railways, NHAI, and PSUs.";
+            }
+            else if (message.includes("kaise ho")) {
+                return "Main Aacha Hun Tum Kaise ho..?"
+
+            }
+            else if (message.includes("ok")) {
+                return "Thanks.."
+
+            }
+            else if (message.includes("tender support") || message.includes("bid assistance")) {
+                return "We provide complete support for government tender registrations and help you with bid preparation and submission.";
+            }
+            else if (message.includes("government tenders")) {
+                return "We specialize in supporting tenders for State & Central Government, Indian Railways, NHAI, and various PSUs.";
+            }
+            else if (message.includes("startup consulting") || message.includes("business consultant")) {
+                return "We also offer expert business consulting services, especially for startups and business development strategies.";
+            }
+            else if (message.includes("contact") || message.includes("email") || message.includes("phone")) {
+                return "You can contact us at pradeepgoel.alchapo@gmail.com or call +91-7011-68-60-21.";
+            }
+            else if (message.includes("address") || message.includes("location")) {
+                return "Our office is located at #32 A, Ground Floor, 3D Block, Dakshini Pitampura, Pitampura, Delhi - 110034, India.";
+            }
+            else if (message.includes("email")) {
+                return "Please email us at pradeepgoel.alchapo@gmail.com.";
+            }
+            else if (message.includes("how to register") || message.includes("tender registration")) {
+                return "We help you with the entire process of Tender Portal Registration to get you registered and ready to bid.";
+            }
+            else if (message.includes("pricing") || message.includes("cost")) {
+                return "For pricing details, please contact us directly at the provided phone number or email.";
+            }
+            else if (message.includes("thank")) {
+                return "You're welcome! Feel free to ask any other questions.";
+            }
+            else if (message.includes("bye") || message.includes("goodbye")) {
+                return "Goodbye! Thanks for contacting Googlies. Have a great day!";
+            }
+            else {
+                return "Sorry, I didn't get that. Please ask about our services, contact info, or tenders.";
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
